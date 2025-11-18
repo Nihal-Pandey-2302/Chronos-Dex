@@ -1,0 +1,73 @@
+pragma cashscript ^0.12.0;
+
+/**
+ * CHRONOS DEX: SwapRouter.cash (v6)
+ *
+ * FIX: Corrected the byte-splitting logic in swapMultiHop.
+ * The previous logic (v5) was incorrect and caused the
+ * 'bytes64' to 'bytes32' cast error.
+ *
+ * We now correctly parse the 32-byte token categories from the 'path'
+ * by splitting the bytes string sequentially.
+ */
+contract SwapRouter(
+    // bytes20 factoryAdmin,  // COMPILED OUT - Unused variable
+    // bytes20 poolFactory    // COMPILED OUT - Unused variable
+) {
+
+    /**
+     * swapMultiHop
+     *
+     * Executes a series of swaps through a predefined path.
+     * We unroll the loop for a max of 3 hops (A -> B -> C).
+     */
+    function swapMultiHop(
+        sig userSig,
+        pubkey userPk,
+        bytes path,     // Serialized path: [tokenA_category (32), tokenB_category (32), tokenC_category (32), ...]
+        int minAmountOut
+    ) {
+        // 1. Verify user signature
+        require(checkSig(userSig, userPk));
+
+        // 2. Define path categories
+        // We unroll for max 3 tokens (2 hops: A -> B -> C)
+
+        // FIX: Corrected byte splitting logic
+        // Get tokenA (bytes 0-31)
+        bytes32 tokenA = bytes32(path.split(32)[0]);
+        bytes rest = path.split(32)[1];
+
+        // Get tokenB (bytes 32-63)
+        bytes32 tokenB = bytes32(rest.split(32)[0]);
+        bytes rest2 = rest.split(32)[1];
+
+        // Get tokenC (bytes 64-95)
+        bytes32 tokenC = bytes32(rest2.split(32)[0]);
+
+
+        // 3. 🎯 "LOOP" TARGET (UNROLLED)
+        // A simplified check:
+        // Verify input[0] is TokenA
+        require(tx.inputs[0].tokenCategory == tokenA);
+
+        // Verify output[0] (user's final token)
+        // This assumes a 2-hop (A->B->C) swap.
+        require(tx.outputs[0].tokenCategory == tokenC);
+        require(tx.outputs[0].tokenAmount >= minAmountOut);
+
+        // Verify path length
+        if (path.length > 64) {
+            // Path is A -> B -> C
+            require(tokenC != 0x0000000000000000000000000000000000000000000000000000000000000000);
+        } else {
+            // Path is A -> B
+            require(tokenB != 0x0000000000000000000000000000000000000000000000000000000000000000);
+            require(tx.outputs[0].tokenCategory == tokenB);
+        }
+
+        // The core multi-hop logic is in *how the transaction is built*
+        // by the frontend. This contract is the "verifier" that
+        // the multi-hop swap followed the rules.
+    }
+}

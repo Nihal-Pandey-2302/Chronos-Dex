@@ -1,0 +1,121 @@
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+nihal@nihal-HP-Pavilion-Laptop-14-dv2xxx:~/Projects/chronos-dex$ node scripts/00-generate-seed.mjs
+🌱 CHRONOS DEX - Seed Phrase Generator
+
+⚠️  IMPORTANT: This is a TEST wallet generator.
+For production, use a hardware wallet or secure seed generation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔑 YOUR 12-WORD SEED PHRASE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+arrive axis arrow auto atom assume ahead account acid agent actual acquire
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️  WRITE THIS DOWN AND KEEP IT SAFE!
+
+📝 IMPORT TO CASHONIZE:
+1. Go to: https://cashonize.com/
+2. Click "Import Wallet"
+3. Enter seed phrase above
+4. Derivation path: m/44'/145'/0' (standard)
+5. Settings → Network → Chipnet
+6. Copy your address
+7. Fund from faucet
+
+💾 SAVE TO .ENV.LOCAL:
+After importing to Cashonize:
+- Go to Settings → Show Private Key
+- Copy the WIF (starts with "c")
+- Save to frontend/.env.local as VITE_TESTER_WIF
+
+nihal@nihal-HP-Pavilion-Laptop-14-dv2xxx:~/Projects/chronos-dex$ 
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+nihal@nihal-HP-Pavilion-Laptop-14-dv2xxx:~/Projects/chronos-dex$ node scripts/mint-tokens.mjs
+
+
+═══════════════════════════════════════════════════════
+  CHRONOS DEX - Placeholder Token Category Generator
+═══════════════════════════════════════════════════════
+
+
+⚠️  IMPORTANT:
+These are PLACEHOLDER categories for testing deployment.
+You will need to mint REAL tokens before final submission!
+
+
+📋 Generated Placeholder Categories:
+
+
+Token A (CHRONOS):
+8e0a0dcffb1640327a71a1f6bfad8e17b54754dbc3eb61a7ccdf90a816d8fe36
+
+
+Token B (TEMPUS):
+5657dc393bc8993809d16f0ada61651ab52d6faf29460b6b92bc8f3c6a23861e
+
+
+LP Token (CHR-TMP-LP):
+b01be4b25771af2a4983ae5a51edf68fe5fa65d1b29815924d4e62fd178678c6
+
+
+✅ Found existing .env.local
+
+
+Would you like to update it with these placeholders? (y/n)
+Or manually copy the categories above into your .env.local
+
+
+📦 Created backup: .env.local.backup
+✅ Updated .env.local with placeholder categories
+
+
+═══════════════════════════════════════════════════════
+  NEXT STEPS
+═══════════════════════════════════════════════════════
+
+
+1️⃣  Verify your .env.local has:
+   ✓ VITE_TESTER_WIF (your Chipnet WIF)
+   ✓ Token categories (just added!)
+
+
+2️⃣  Deploy your contracts:
+   cd scripts
+   node deploy-contracts.mjs
+
+
+3️⃣  Later (before submission), mint REAL tokens:
+   Option A: Use Electron Cash (recommended)
+             https://electroncash.org/
+   Option B: Use Paytaca wallet
+             https://www.paytaca.com/
+   Option C: Wait for Cashonize to work again
+
+
+4️⃣  Update .env.local with real token categories
+
+
+═══════════════════════════════════════════════════════
+  WHY PLACEHOLDERS ARE OK FOR NOW
+═══════════════════════════════════════════════════════
+
+
+✅ Your contracts will compile and deploy
+✅ You can test the frontend interface
+✅ Judges can verify your Layla CHIPs usage
+✅ Your architecture is fully demonstrable
+
+
+⚠️  Before final submission, you MUST:
+   - Mint real tokens you control
+   - Update the categories in .env.local
+   - Create demo video with actual swaps
+
+
+🎯 Current Status: Ready to deploy contracts!

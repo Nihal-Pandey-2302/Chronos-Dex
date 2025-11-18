@@ -1,0 +1,52 @@
+pragma cashscript ^0.12.0;
+
+/**
+ * CHRONOS DEX: PoolFactory.cash (v2)
+ *
+ * FIX: Commented out unused 'poolId' variable to satisfy compiler.
+ * This contract is NOT essential for the MVP.
+ */
+
+contract PoolFactory(
+    bytes20 factoryAdmin  // Admin who can create pools
+) {
+
+    /**
+     * createPool
+     */
+    function createPool(
+        sig adminSig,
+        pubkey adminPk,
+        bytes32 tokenA_category,
+        bytes32 tokenB_category,
+        bytes32 lpToken_category
+    ) {
+        // 1. Verify admin
+        require(hash160(adminPk) == factoryAdmin);
+        require(checkSig(adminSig, adminPk));
+
+        // 2. Generate unique pool ID (deterministic from token categories)
+        // bytes20 poolId = hash160( // COMPILED OUT - Unused variable
+        //     tokenA_category +
+        //     tokenB_category +
+        //     lpToken_category
+        // );
+
+        // 3. Create pool registry NFT metadata (derived from categories)
+        bytes poolMetadata = tokenA_category +
+                            tokenB_category +
+                            lpToken_category;
+
+        // 4. Enforce outputs
+
+        // Output 0: Factory state (unchanged)
+        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+
+        // Output 1: Pool registry NFT
+        require(tx.outputs[1].nftCommitment == poolMetadata);
+        require(tx.outputs[1].value >= 1000);
+
+        // Outputs 2-4: Initial pool UTXOs are created externally
+        // This contract just validates the creation
+    }
+}

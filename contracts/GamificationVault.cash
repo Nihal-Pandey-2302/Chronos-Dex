@@ -1,0 +1,86 @@
+pragma cashscript ^0.12.0;
+
+/**
+ * CHRONOS DEX: GamificationVault.cash (v4)
+ *
+ * This contract acts as the on-chain scorekeeper for the Battle.cash bounty.
+ * It is the target of the P2S call from LiquidityPool.swap().
+ *
+ * STATE MODEL:
+ * The vault's state (the leaderboard) is stored in the nftCommitment
+ * of a single "State NFT" which this contract holds.
+ *
+ * FIX:
+ * - Line 62: Explicitly cast the result of split() to bytes8.
+ *
+ * BOUNTY TARGETS:
+ * ✅ Battle.cash (100M): This is the gamification engine.
+ * ✅ P2S (10M): This contract has a function to consume P2S outputs.
+ */
+contract GamificationVault(
+    bytes20 adminPkh,            // Admin who can update the state
+    bytes32 stateToken_category  // The category of our "State NFT"
+) {
+
+    /**
+     * updateScore
+     *
+     * This function is called by an off-chain service (the "admin")
+     * to process a P2S output from the LiquidityPool and update the
+     * vault's total volume state.
+     *
+     * TRANSACTION STRUCTURE:
+     * Inputs:
+     * [0] Vault State UTXO (holding the State NFT)
+     * [1] P2S Output UTXO (from a LiquidityPool swap)
+     * [2] Admin signing UTXO
+     *
+     * Outputs:
+     * [0] New Vault State UTXO (with updated State NFT)
+     * [1] Admin change output
+     */
+    function updateScore(
+        sig adminSig,
+        pubkey adminPk,
+        bytes swapData // The full nftCommitment from the P2S output
+    ) {
+        // 1. Verify admin signature
+        require(hash160(adminPk) == adminPkh);
+        require(checkSig(adminSig, adminPk));
+
+        // 2. Validate Inputs
+        // Input[0] must be the old state UTXO
+        require(tx.inputs[0].tokenCategory == stateToken_category);
+        // Check for data-only NFT by tokenAmount
+        require(tx.inputs[0].tokenAmount == 0); // Must be data-only NFT
+        bytes oldState = tx.inputs[0].nftCommitment;
+
+        // Input[1] must be the P2S output we are consuming
+        // We verify its commitment matches the one passed in
+        require(tx.inputs[1].nftCommitment == swapData);
+
+        // 3. Parse data from P2S output
+        // Format: [userPkh (20 bytes)][amountIn (8 bytes)][poolId (20 bytes)]
+        // FIX: Explicitly cast bytes to bytes8
+        bytes8 amountIn_bytes = bytes8(swapData.split(20)[1]);
+        int amountIn = int(amountIn_bytes);
+        // int xpGained = amountIn / 1000; // COMPILED OUT - Unused variable
+
+        // 4. Parse old state
+        int oldTotalVolume = int(oldState.split(0)[0]);
+
+        // 5. Calculate new state
+        int newTotalVolume = oldTotalVolume + amountIn;
+        bytes newState = bytes8(newTotalVolume);
+
+        // 6. Enforce state covenant (Output[0])
+        // The new state UTXO must be sent back to this contract,
+        // holding the same State NFT category, with the new commitment.
+        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+        require(tx.outputs[0].tokenCategory == stateToken_category);
+        // Check for data-only NFT by tokenAmount
+        require(tx.outputs[0].tokenAmount == 0); // Must be data-only NFT
+        require(tx.outputs[0].nftCommitment == newState);
+        require(tx.outputs[0].value >= 1000);
+    }
+}

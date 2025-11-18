@@ -1,0 +1,25 @@
+{
+    "name": "chronos-dex-monorepo",
+    "private": true,
+    "version": "1.0.0",
+    "description": "Chronos DEX - BCH Blaze Hackathon 2025",
+    "workspaces": [
+        "frontend",
+        "contracts"
+    ],
+    "scripts": {
+        "frontend": "npm run dev -w frontend",
+        "contracts:build": "npm run build -w contracts",
+        "dev": "npm run frontend"
+    },
+    "author": "Nihal Pandey",
+    "dependencies": {
+        "bchaddrjs": "^0.5.2",
+        "bip39": "^3.1.0",
+        "bs58": "^6.0.0",
+        "dotenv": "^17.2.3",
+        "hdkey": "^2.1.0",
+        "mainnet-js": "^2.7.31",
+        "wif": "^5.0.0"
+    }
+}
