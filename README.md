@@ -72,11 +72,13 @@ On-chain XP tracking and leaderboard system:
 
 ## 🏗️ Architecture
 
-![Chronos DEX Architecture](./System_Overview.png)
+![Chronos DEX Architecture](./assets/images/System_Overview.png)
+
+For detailed technical documentation, see [ARCHITECTURE.md](./ARCHITECTURE.md).
 
 ### Swap Flow
 
-![Swap Transaction Flow](./Swap-transaction-flow.png)
+![Swap Transaction Flow](./assets/images/Swap-transaction-flow.png)
 
 ---
 

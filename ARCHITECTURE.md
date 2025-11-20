@@ -2,27 +2,27 @@
 
 ## System Overview
 
-![System Overview](./System_Overview.png)
+![System Overview](./assets/images/System_Overview.png)
 
 ## Swap Transaction Flow
 
-![Swap Transaction Flow](./Swap-transaction-flow.png)
+![Swap Transaction Flow](./assets/images/Swap-transaction-flow.png)
 
 ## Data Flow Architecture
 
-![Data Flow Architecture](./Dataflow.png)
+![Data Flow Architecture](./assets/images/Dataflow.png)
 
 ## Contract State Management
 
-![Contract State Management](./Contract%20state%20management.png)
+![Contract State Management](./assets/images/Contract%20state%20management.png)
 
 ## UTXO Management
 
-![UTXO Management](./UTXO%20management.png)
+![UTXO Management](./assets/images/UTXO%20management.png)
 
 ## Technology Stack
 
-![Technology Stack](./TechStack.png)
+![Technology Stack](./assets/images/TechStack.png)
 
 ## File Structure
 
