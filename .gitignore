@@ -28,7 +28,7 @@ contracts/*.debug
 frontend/dist
 frontend/.env
 frontend/.env.local
-
+frontend/.env.local.backup
 # Editor directories
 .vscode/*
 !.vscode/extensions.json

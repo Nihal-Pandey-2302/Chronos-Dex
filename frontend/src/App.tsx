@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ElectrumNetworkProvider, type Artifact } from 'cashscript';
+import { createWalletFromWif } from './contractService';
 import SwapPage from './components/SwapPage';
 import PoolPage from './components/PoolPage';
 import DashboardPage from './components/DashboardPage';
@@ -30,12 +31,9 @@ function App() {
         setError('VITE_TESTER_WIF not set in .env.local file.');
         return;
       }
-      
-      const mockWallet = {
-        address: 'bchtest:qpudzv2473ztyc058jh58yyzjsvjjxc5n5kqnq43h5',
-        wif: wif
-      };
-      
+
+      const mockWallet = await createWalletFromWif(wif);
+
       setWallet(mockWallet);
       console.log("Wallet connected:", mockWallet.address);
 
@@ -83,7 +81,7 @@ function App() {
               <p className="text-sm text-gray-400 mt-0.5">First Layla-Ready AMM on Bitcoin Cash</p>
             </div>
           </div>
-          
+
           {wallet ? (
             <div className="flex items-center space-x-3">
               <div className="px-4 py-2 bg-gray-800/80 backdrop-blur-xl rounded-xl border border-gray-700/50">
@@ -112,7 +110,7 @@ function App() {
           <div className="mb-6 p-4 bg-red-500/10 backdrop-blur-xl border border-red-500/50 rounded-2xl animate-fade-in">
             <div className="flex items-center space-x-3">
               <svg className="w-5 h-5 text-red-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd"/>
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
               </svg>
               <div>
                 <p className="font-bold text-red-300">Error</p>
@@ -127,11 +125,10 @@ function App() {
           <div className="inline-flex space-x-2 p-2 bg-gray-800/80 backdrop-blur-xl rounded-2xl border border-gray-700/50 shadow-xl">
             <button
               onClick={() => setPage('swap')}
-              className={`px-8 py-3 rounded-xl font-bold transition-all duration-300 ${
-                page === 'swap'
-                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/50 scale-105'
-                  : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
-              }`}
+              className={`px-8 py-3 rounded-xl font-bold transition-all duration-300 ${page === 'swap'
+                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/50 scale-105'
+                : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
+                }`}
             >
               <span className="flex items-center space-x-2">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -142,11 +139,10 @@ function App() {
             </button>
             <button
               onClick={() => setPage('pool')}
-              className={`px-8 py-3 rounded-xl font-bold transition-all duration-300 ${
-                page === 'pool'
-                  ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/50 scale-105'
-                  : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
-              }`}
+              className={`px-8 py-3 rounded-xl font-bold transition-all duration-300 ${page === 'pool'
+                ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg shadow-blue-500/50 scale-105'
+                : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
+                }`}
             >
               <span className="flex items-center space-x-2">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -157,11 +153,10 @@ function App() {
             </button>
             <button
               onClick={() => setPage('dashboard')}
-              className={`px-8 py-3 rounded-xl font-bold transition-all duration-300 ${
-                page === 'dashboard'
-                  ? 'bg-gradient-to-r from-yellow-600 to-orange-600 text-white shadow-lg shadow-yellow-500/50 scale-105'
-                  : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
-              }`}
+              className={`px-8 py-3 rounded-xl font-bold transition-all duration-300 ${page === 'dashboard'
+                ? 'bg-gradient-to-r from-yellow-600 to-orange-600 text-white shadow-lg shadow-yellow-500/50 scale-105'
+                : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
+                }`}
             >
               <span className="flex items-center space-x-2">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
